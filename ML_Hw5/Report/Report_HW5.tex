@@ -1,0 +1,122 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage{fancyvrb}
+\usepackage{subfigure}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+\author{Giuseppe L'Erario}
+\date{}
+\title{Clustering}
+
+\begin{document}
+\maketitle
+
+\section*{Introduction}
+
+In this report the focus is on unsupervised learning techniques for cluster analysis. The goal of clustering is to find structures into data when we do not have labeled dataset. 
+
+In particular we will apply \emph{K-Means} algorithm and \emph{Gaussian Mixture Model} on \emph{digits} dataset.
+
+\section{K-Means}
+\emph{K-Means} algorithm is based on the idea of the \textbf{centroids}, the average of similar points in a cluster. The weakness of K-Mean is that the number of \emph{k} clusters must be specified a priori: it is clear that a bad choice of \emph{k} leads to bad performances.
+
+K-means algorithm can be summarized:
+\begin{enumerate}[leftmargin=3\parindent]
+	\item Pick \emph{k centroids} randomly and far from each other as center of initial clusters;
+	\item Assign each point to the nearest centroid;
+	\item Move the \emph{centroids} accordingly with the mean of the points assigned to it;
+	\item Iterate until the \emph{centroids} do not move.
+\end{enumerate}
+
+The similarity between the point depends on the distance we heave chosen. The commonly used distance used in clustering is the \textbf{square Euclidean distance}:
+\begin{equation}
+d(\mathbf{x}^{(i)},\mathbf{x}^{(j)})^2=\sum_{i}(x_i^{(i)}-x_i^{(j)})^2=\|\mathbf{x}^{(i)}-\mathbf{x}^{(j)}\|
+\end{equation}
+and the problem is the minimization of the \textbf{sum of squared errors (SSE)}:
+\begin{equation}
+\underset{S}{argmin} \sum_{i=1}^{K} \sum_{x_j \in S_i} \|\mathbf{x}_j-\boldsymbol{\mu}_i\|
+\end{equation}
+where $\boldsymbol{\mu}$ is the centroid vector for the cluster \emph{j}. \\
+
+We import the first five classes of the \emph{digits} dataset, then preprocess data and apply PCA(2). \\
+
+The results of \emph{K-Means} clustering are shown in fig.\ref{K_mean}. \\
+
+\begin{figure}
+\centering
+\subfigure[K=3\label{K_3}]{\includegraphics[width=0.4\linewidth]{../KMean_k3.pdf}}\qquad\qquad
+\subfigure[K=4\label{K_4}]{\includegraphics[width=0.4\linewidth]{../KMean_k4.pdf}}
+\subfigure[K=5\label{K_5}]{\includegraphics[width=0.4\linewidth]{../KMean_k5.pdf}}\qquad\qquad
+\subfigure[K=6\label{K_6}]{\includegraphics[width=0.4\linewidth]{../KMean_k6.pdf}}
+\subfigure[K=7\label{K_7}]{\includegraphics[width=0.4\linewidth]{../KMean_k7.pdf}}\qquad\qquad
+\subfigure[K=8\label{K_8}]{\includegraphics[width=0.4\linewidth]{../KMean_k8.pdf}}
+\subfigure[K=9\label{K_9}]{\includegraphics[width=0.4\linewidth]{../KMean_k9.pdf}}\qquad\qquad
+\subfigure[K=10\label{K_10}]{\includegraphics[width=0.4\linewidth]{../KMean_k10.pdf}}
+\caption{K-Mean clustering\label{K_mean}}
+\end{figure} 
+
+The performance are measured with three parameters:
+\begin{description}[leftmargin=3\parindent]
+	\item[Purity]: Each cluster is assigned to the most frequent class in the cluster itself. The accuracy is the rate between the sum of correct-assigned samples and the total samples.
+	%It is implemented through the function:
+	%\begin{Verbatim}
+	%def purity(pred, y, k):
+	%  z = []
+	%  summa = 0
+	%  A = np.c_[pred, y]
+	%  for j in range(k):
+	%    z = A[A[:,0]==j, 1]
+	%    summa += np.max(np.bincount(z))
+	%  return summa/A.shape[0]
+	%\end{Verbatim}.
+	The issue of \emph{purity} is that it does not give information about the trade off between the quality of the clustering and the number of the clusters. If we build \emph{N} cluster for \emph{N} samples we reach a purity equal to 1, trivially. 
+	\item[Homogeneity]: If every cluster contains only data points belonging to a single class, then homogeneity is satisfied. A score equal to 1 means perfect homogeneous labeling.
+	\item[Normalized Mutual Information]: This function scales the \emph{Mutual Information} score between 0 and 1. The \emph{Mutual Information} measures the amount of information that we have about the data, knowing what the cluster is. Like the \emph{purity}, the problem of the \emph{Mutual Information} is that it reaches trivially the maximum value if we build \emph{N} clusters for \emph{N} samples. \textbf{NMI} fixes this problem. 
+\end{description}
+
+In fig.\ref{fig:measure_kmean} can be seen that the \emph{purity} reachs a peak when $k=5$ and remains constant. The \emph{homogeneity} improves with \emph{k}, infact, the smaller are the clusters the more is the probability that in one cluster are present homogeneous samples. On the other side, \emph{NMI} reach its maximum when $k=5$ and then decreases, because penalizes the large cardinalities.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{../measure_kmean.pdf}
+\caption{Performance on variyng of the number \emph{k} of clusters}
+\label{fig:measure_kmean}
+\end{figure}
+
+\clearpage
+\section{Gaussian Mixture Models}
+
+\begin{figure}[!h]
+	\centering
+	\subfigure[K=3\label{K_3_g}]{\includegraphics[width=0.4\linewidth]{../GMM_k3.pdf}}\qquad\qquad
+	\subfigure[K=4\label{K_4_g}]{\includegraphics[width=0.4\linewidth]{../GMM_k4.pdf}}
+	\subfigure[K=5\label{K_5}]{\includegraphics[width=0.4\linewidth]{../GMM_k5.pdf}}\qquad\qquad
+	\subfigure[K=6\label{K_6_g}]{\includegraphics[width=0.4\linewidth]{../GMM_k6.pdf}}
+	\subfigure[K=7\label{K_7_g}]{\includegraphics[width=0.4\linewidth]{../GMM_k7.pdf}}\qquad\qquad
+	\subfigure[K=8\label{K_8_g}]{\includegraphics[width=0.4\linewidth]{../GMM_k8.pdf}}
+	\subfigure[K=9\label{K_9_g}]{\includegraphics[width=0.4\linewidth]{../GMM_k9.pdf}}\qquad\qquad
+	\subfigure[K=10\label{K_10_g}]{\includegraphics[width=0.4\linewidth]{../GMM_k10.pdf}}
+	\caption{K-Mean clustering\label{Gmm}}
+\end{figure} 
+
+A Gaussian mixture model is a probabilistic model that implies that all the data points are generated from a mixture of Gaussian distributions. These Gaussian distributions are fitted with \emph{Expectation-Maximization} algorithm. This algorithm assumes random components and computes for each point the probability of being generated by each model. Then iteratively tunes the parameter to maximize the associated likelihood of the data.
+
+The results of the GMM-based clustering is shown in fig.\ref{Gmm}.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{../measure_gmm.pdf}
+	\caption{Performance on variyng of the number \emph{k} of clusters}
+	\label{fig:measure_gmm}
+\end{figure}
+
+The behaviour of the GMM on variyng of \emph{k} is quite similar to the K-means. \emph{Purity} increases till $k=5$ and remains quite constant. \emph{Homogeneity} increases with \emph{k}, while \emph{NMI} decreases after a peak around $k=5$. The only difference is that the \emph{NMI} does not change drastically as with K-mean algorithm.
+
+\end{document}

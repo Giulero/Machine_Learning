@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BIF VERSION="0.3"  xmlns="http://www.cs.ubc.ca/labs/lci/fopi/ve/XMLBIFv0_3"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.cs.ubc.ca/labs/lci/fopi/ve/XMLBIFv0_3 http://www.cs.ubc.ca/labs/lci/fopi/ve/XMLBIFv0_3/XMLBIFv0_3.xsd">
+<NETWORK>
+<NAME>Untitled</NAME>
+<PROPERTY>detailed = </PROPERTY>
+<PROPERTY>short = </PROPERTY>
+
+<VARIABLE TYPE="nature">
+	<NAME>Coin1</NAME>
+	<OUTCOME>T</OUTCOME>
+	<OUTCOME>C</OUTCOME>
+	<PROPERTY>position = (7173.0, 5143.0)</PROPERTY>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>Coin2</NAME>
+	<OUTCOME>T</OUTCOME>
+	<OUTCOME>C</OUTCOME>
+	<PROPERTY>position = (7415.0, 5183.0)</PROPERTY>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>Coin3</NAME>
+	<OUTCOME>T</OUTCOME>
+	<OUTCOME>C</OUTCOME>
+	<PROPERTY>position = (7686.0, 5138.0)</PROPERTY>
+</VARIABLE>
+
+<VARIABLE TYPE="nature">
+	<NAME>Estraction</NAME>
+	<OUTCOME>c1</OUTCOME>
+	<OUTCOME>c2</OUTCOME>
+	<OUTCOME>c3</OUTCOME>
+	<PROPERTY>position = (7415.0, 4889.0)</PROPERTY>
+</VARIABLE>
+
+<DEFINITION>
+	<FOR>Coin1</FOR>
+	<GIVEN>Estraction</GIVEN>
+	<TABLE>0.2 0.8 0.6 0.4 0.8 0.2</TABLE>
+</DEFINITION>
+
+<DEFINITION>
+	<FOR>Coin2</FOR>
+	<GIVEN>Estraction</GIVEN>
+	<TABLE>0.2 0.8 0.6 0.4 0.8 0.2</TABLE>
+</DEFINITION>
+
+<DEFINITION>
+	<FOR>Coin3</FOR>
+	<GIVEN>Estraction</GIVEN>
+	<TABLE>0.2 0.8 0.6 0.4 0.8 0.2</TABLE>
+</DEFINITION>
+
+<DEFINITION>
+	<FOR>Estraction</FOR>
+	<TABLE>0.3333 0.3333 0.3334</TABLE>
+</DEFINITION>
+</NETWORK>
+</BIF>
